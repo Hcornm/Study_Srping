@@ -7,7 +7,15 @@ public class MemberServiceImpl implements MemberService {
     // 인터페이스                                      = 구현체
     // 다형성
     // 이코드의 단점은 인터페이스(추상화) 뿐만 아니라 구현체까지 의존하고 있음 DIP위반
-    private final MemberRepository memberRepository = new MemoryMemberRepositoy();
+    // private final MemberRepository memberRepository = new MemoryMemberRepositoy();
+
+    // 이러면 추상화에만 의존한다
+    private final MemberRepository memberRepository;
+
+    // 생성자 주입
+    public MemberServiceImpl(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     @Override
     public void join(Member member) {
