@@ -10,6 +10,11 @@ import org.springframework.stereotype.Component;
 // 주문 구현체
 @Component
 public class OrderServiceImpl implements OrderService {
+    // 의존관계 주입 4가지 방법
+    // 1. 생성자 주입
+    // 2. 수정자 주입(setter)
+    // 3. 필드주입
+    // 4. 일반 메서드 주입
 
 
     // private final MemberRepository memberRepository = new MemoryMemberRepositoy();
@@ -25,14 +30,48 @@ public class OrderServiceImpl implements OrderService {
     // 구현체들을 수정하더라도 Order구현체에서 OCP위반을 하지 않고 할인 정책을 변경할 수 있다.
     // 추상화인 인터페이스만 의존
     // private DiscountPolicy discountPolicy;
-    private final MemberRepository memberRepository;
-    private final DiscountPolicy discountPolicy;
+    private MemberRepository memberRepository;
+    private DiscountPolicy discountPolicy;
 
+    // 3.필드 주입방식
+    // 이름 그대로 필드에 바로 주입하는 방식
+    // 코드가 간결하지만 외부에서 변경이 불가능해서 테스트하기 힘들다는 치명적인 단점이 존재한다. DI프레임워크가 없으면 아무것도 할 수 없다.
+    // 최근 추세는 필드 주입방식을 사용하지 않는 것이다. 사용지양
+//    @Autowired
+//    private MemberRepository memberRepository;
+
+    // 2. 수정자 주입방식
+    // setter 방식으로 의존관계 주입
+    // 선택, 변경 가능성이 있는 의존관계에 사용
+    // 자바빈 프로퍼티 규약의 수정자 메서드 방식을 사용하는 방법
+    // 선택적 의존관계 주입이 필요할 때 쓰이며 순서는 생성자 의존관계 주입이 먼저 일어나고 그 다음이 수정자 주입방식이 일어난다.
+//    @Autowired
+//    public void setMemberRepository(MemberRepository memberRepository) {
+//        this.memberRepository = memberRepository;
+//    }
+
+    // 4. 일반메서드 주입
+    // 일반 메서드에 @Autowired 어노테이션을 등록해서 주입 받을 수 있다.
+    // 한번에 여러 필드를 주입 할 수 있다.
+    // 일반적으로 사용하지 않음
+//    @Autowire이
+//       // 일반 메서드
+//    Public void init(MemberRepository memberRepository) {
+//        this.memberRepository = memberRepository;
+//    }
+
+    // 1. 생성자 주입방식
+    // 이름 그대로 생성자를 통해서 의존관계를 주입하는 방법
+    // 생성자 호출시점에 딱 1번만 호출되는 것이 보장된다.
+    // 불변, 필수 의존관계에 사용된다.
     @Autowired
     public OrderServiceImpl(MemberRepository memberRepository, DiscountPolicy discountPolicy) {
         this.memberRepository = memberRepository;
         this.discountPolicy = discountPolicy;
     }
+
+
+
 
     @Override
     public Order createOrder(Long memberId, String itemName, int itemPrice) {
