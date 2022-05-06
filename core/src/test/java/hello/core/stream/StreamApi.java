@@ -5,8 +5,10 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class StreamApi {
 
@@ -63,5 +65,9 @@ public class StreamApi {
 //                            .collect(Collectors.toList());
 //
 //            System.out.println(resultList2); // [5, 6
+
+        Stream<Integer> numbers = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Optional<Integer> sum = numbers.reduce((x, y) -> x + y);
+        sum.ifPresent(s -> System.out.println("sum: " + s));
     }
 }
