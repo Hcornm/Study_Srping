@@ -3,6 +3,7 @@ package hello.core.stream;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -69,5 +70,43 @@ public class StreamApi {
         Stream<Integer> numbers = Stream.of(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Optional<Integer> sum = numbers.reduce((x, y) -> x + y);
         sum.ifPresent(s -> System.out.println("sum: " + s));
+    }
+
+    /**
+     * BigDecimal을 String 타입으로 리턴해주는 인터페이스
+     */
+    @FunctionalInterface
+    interface BigDecimalToCurrency {
+        String toCurrency(BigDecimal bigDecimal);
+    }
+
+    /**
+     * 어떠한 값이 들어와도(제네릭) toString으로 바꿔주는 인터페이스
+     */
+    @FunctionalInterface
+    interface InvalidFunctionalInterface {
+        <T> String toStirnging(T t);
+    }
+
+    @Test
+    void BigDecimalTest() {
+        BigDecimalToCurrency bigDecimalToCurrency = bd -> "$" + bd.toString();
+
+        System.out.println(bigDecimalToCurrency.toCurrency(new BigDecimal("120.00")));
+
+        // 익명 내부 클래스 anonymous inner class
+        InvalidFunctionalInterface invalidFunctionalInterface = new InvalidFunctionalInterface() {
+            @Override
+            public <T> String toStirnging(T t) {
+                return t.toString();
+            }
+        };
+
+        // 람다표현식으로 변경
+        BigDecimalToCurrency bigDecimalToCurrency2 = bigDecimal -> bigDecimal.toString();
+
+
+
+        System.out.println("anonymous class = " + invalidFunctionalInterface.toStirnging(2123));
     }
 }
